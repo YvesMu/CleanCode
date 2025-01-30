@@ -1,3 +1,4 @@
+<h1>ce projet est une version amélioré de la version raté que j'avais fait la semaine dernière</h1>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
