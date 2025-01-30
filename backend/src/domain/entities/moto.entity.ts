@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Moto {
@@ -6,11 +6,15 @@ export class Moto {
   id: string;
 
   @Column()
-  model: string;
+  marque: string;
 
   @Column()
-  mileage: number;
+  modele: string;
 
-  @Column({ type: 'timestamp' })
-  lastServiceDate: Date;
+  @Column()
+  kilometrage: number;
+
+  // 🚨 Ajouter une relation explicite pour éviter la boucle
+  @ManyToOne(() => Moto, { nullable: true, cascade: true, onDelete: 'SET NULL' })
+  parentMoto?: Moto;
 }

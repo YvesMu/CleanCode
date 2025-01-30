@@ -1,27 +1,19 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Moto } from '../../domain/entities/moto.entity';
+import { SqlMotoRepository } from '../repositories/moto.repository.sql';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DATABASE_HOST'),
-        port: configService.get<number>('DATABASE_PORT'),
-        username: configService.get<string>('DATABASE_USER'),
-        password: configService.get<string>('DATABASE_PASSWORD'),
-        database: configService.get<string>('DATABASE_NAME'),
-        entities: [Moto], // ✅ Vérifie que Moto est bien ajouté ici
-        synchronize: true,
-      }),
-      inject: [ConfigService],
-    }),
-    TypeOrmModule.forFeature([Moto]), // ✅ Ajoute `TypeOrmModule.forFeature([Moto])`
+    TypeOrmModule.forFeature([Moto]), // Charger l'entité Moto dans TypeORM
   ],
-  exports: [TypeOrmModule],
+  providers: [
+    SqlMotoRepository, // Enregistrement du repository directement
+    {
+      provide: 'MotoRepository',
+      useExisting: SqlMotoRepository, // ⚠️ On doit garder `useExisting` pour éviter `UnknownDependenciesException`
+    },
+  ],
+  exports: ['MotoRepository'],
 })
 export class DatabaseModule {}

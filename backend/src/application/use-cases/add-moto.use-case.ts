@@ -1,11 +1,11 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { MotoRepository } from '../../domain/repositories/moto.repository';
 import { Moto } from '../../domain/entities/moto.entity';
 
 @Injectable()
 export class AddMotoUseCase {
   constructor(
-    @Inject('MotoRepository') // ✅ Assure-toi que ce token est le même que dans AppModule
+    @Inject('MotoRepository') // Injection avec le bon token
     private readonly motoRepository: MotoRepository,
   ) {}
 

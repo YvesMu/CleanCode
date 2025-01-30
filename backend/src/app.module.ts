@@ -1,20 +1,24 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { MotoController } from './interface/controllers/moto/moto.controller';
 import { AddMotoUseCase } from './application/use-cases/add-moto.use-case';
-import { SqlMotoRepository } from './infrastructure/repositories/moto.repository.sql';
 
 @Module({
-  imports: [DatabaseModule],
-  controllers: [MotoController],
-  providers: [
-    AddMotoUseCase,
-    SqlMotoRepository, // ✅ Ajoute `SqlMotoRepository` ici !
-    {
-      provide: 'MotoRepository', // ✅ Assure-toi que ce token est bien utilisé partout
-      useClass: SqlMotoRepository,
-    },
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'root',
+      database: 'postgres',
+      entities: [__dirname + '/**/*.entity.{js,ts}'],
+      synchronize: true,
+    }),
+    forwardRef(() => DatabaseModule), // ✅ Ajout de `forwardRef()` ici
   ],
-  exports: ['MotoRepository'],
+  controllers: [MotoController],
+  providers: [AddMotoUseCase],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Moto } from '../../domain/entities/moto.entity';
@@ -7,16 +7,19 @@ import { MotoRepository } from '../../domain/repositories/moto.repository';
 @Injectable()
 export class SqlMotoRepository implements MotoRepository {
   constructor(
-    @InjectRepository(Moto) // ✅ Vérifie cette injection
+    @InjectRepository(Moto)
     private readonly repository: Repository<Moto>,
+    
+    @Inject(forwardRef(() => 'MotoRepository')) // ✅ Ajout de `forwardRef()`
+    private readonly motoRepository: MotoRepository,
   ) {}
 
   async findById(id: string): Promise<Moto | null> {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({ where: { id }, relations: ['parentMoto'] });
   }
 
   async findAll(): Promise<Moto[]> {
-    return this.repository.find();
+    return this.repository.find({ relations: ['parentMoto'] });
   }
 
   async save(moto: Moto): Promise<void> {
