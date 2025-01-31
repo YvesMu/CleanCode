@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { MotoController } from './interface/controllers/moto/moto.controller';
@@ -16,7 +16,7 @@ import { AddMotoUseCase } from './application/use-cases/add-moto.use-case';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
     }),
-    forwardRef(() => DatabaseModule), // ✅ Ajout de `forwardRef()` ici
+    DatabaseModule, // ✅ Assurez-vous que `DatabaseModule` est bien importé
   ],
   controllers: [MotoController],
   providers: [AddMotoUseCase],

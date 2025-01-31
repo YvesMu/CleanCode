@@ -1,19 +1,17 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Moto } from '../../domain/entities/moto.entity';
 import { SqlMotoRepository } from '../repositories/moto.repository.sql';
+import { AbstractMotoRepository } from '../../domain/repositories/abstract-moto.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Moto]), // Charger l'entité Moto dans TypeORM
-  ],
+  imports: [TypeOrmModule.forFeature([Moto])],
   providers: [
-    SqlMotoRepository, // Enregistrement du repository directement
     {
-      provide: 'MotoRepository',
-      useExisting: SqlMotoRepository, // ⚠️ On doit garder `useExisting` pour éviter `UnknownDependenciesException`
+      provide: AbstractMotoRepository,
+      useClass: SqlMotoRepository, // ✅ Injection correcte
     },
   ],
-  exports: ['MotoRepository'],
+  exports: [AbstractMotoRepository],
 })
 export class DatabaseModule {}

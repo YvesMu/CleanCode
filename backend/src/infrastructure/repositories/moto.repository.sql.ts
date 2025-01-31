@@ -1,28 +1,30 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Moto } from '../../domain/entities/moto.entity';
-import { MotoRepository } from '../../domain/repositories/moto.repository';
+import { AbstractMotoRepository } from '../../domain/repositories/abstract-moto.repository';
 
 @Injectable()
-export class SqlMotoRepository implements MotoRepository {
+export class SqlMotoRepository extends AbstractMotoRepository {
   constructor(
     @InjectRepository(Moto)
-    private readonly repository: Repository<Moto>,
-    
-    @Inject(forwardRef(() => 'MotoRepository')) // ✅ Ajout de `forwardRef()`
-    private readonly motoRepository: MotoRepository,
-  ) {}
+    private readonly repository: Repository<Moto>, // ✅ Corrige l'injection
+  ) {
+    super();
+  }
 
   async findById(id: string): Promise<Moto | null> {
-    return this.repository.findOne({ where: { id }, relations: ['parentMoto'] });
+    return this.repository.findOne({ where: { id } });
   }
 
   async findAll(): Promise<Moto[]> {
-    return this.repository.find({ relations: ['parentMoto'] });
+    return this.repository.find();
   }
 
   async save(moto: Moto): Promise<void> {
+    if (!moto.brand || !moto.model || !moto.year) {
+      throw new Error('Données invalides : Tous les champs sont requis.');
+    }
     await this.repository.save(moto);
   }
 

@@ -1,20 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Moto {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  marque: string;
+  @Column({ type: 'varchar', length: 255, nullable: false }) // ✅ Ajout de `nullable: false`
+  brand: string;
 
-  @Column()
-  modele: string;
+  @Column({ type: 'varchar', length: 255, nullable: false }) // ✅ Ajout de `nullable: false`
+  model: string;
 
-  @Column()
-  kilometrage: number;
-
-  // 🚨 Ajouter une relation explicite pour éviter la boucle
-  @ManyToOne(() => Moto, { nullable: true, cascade: true, onDelete: 'SET NULL' })
-  parentMoto?: Moto;
+  @Column({ type: 'int', nullable: false }) // ✅ Ajout de `nullable: false`
+  year: number;
 }

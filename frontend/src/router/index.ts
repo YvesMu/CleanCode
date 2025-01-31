@@ -4,13 +4,15 @@ import Motos from "../views/Motos.vue";
 import Entretiens from "../views/Entretiens.vue";
 import Pieces from "../views/Pieces.vue";
 import Conducteurs from "../views/Conducteurs.vue";
+import AddMoto from "../components/Addmoto.vue"; // Composant pour ajouter une moto
 
 const routes = [
-  { path: "/", component: Dashboard },
-  { path: "/motos", component: Motos },
-  { path: "/entretiens", component: Entretiens },
-  { path: "/pieces", component: Pieces },
-  { path: "/conducteurs", component: Conducteurs },
+  { path: "/", name: "Dashboard", component: Dashboard }, // Page principale
+  { path: "/motos", name: "Motos", component: Motos }, // Page des motos
+  { path: "/entretiens", name: "Entretiens", component: Entretiens }, // Page des entretiens
+  { path: "/pieces", name: "Pieces", component: Pieces }, // Page des pièces
+  { path: "/conducteurs", name: "Conducteurs", component: Conducteurs }, // Page des conducteurs
+  { path: "/add-moto", name: "AddMoto", component: AddMoto }, // Page pour ajouter une moto
 ];
 
 const router = createRouter({
