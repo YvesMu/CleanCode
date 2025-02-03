@@ -6,7 +6,7 @@
       <router-link to="/entretiens" class="nav-link">Entretiens</router-link>
       <router-link to="/pieces" class="nav-link">Pièces</router-link>
       <router-link to="/conducteurs" class="nav-link">Conducteurs</router-link>
-      <router-link to="/add-moto" class="nav-link">Ajouter une Moto</router-link>
+      <router-link to="/addmoto" class="nav-link">Ajouter une Moto</router-link>
     </nav>
     <router-view /> <!-- Composant qui affiche la page en fonction de la route -->
   </div>
