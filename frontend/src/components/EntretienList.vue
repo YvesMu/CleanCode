@@ -17,10 +17,10 @@
           <tr v-for="entretien in entretiens" :key="entretien.id">
             <td>{{ entretien.date }}</td>
             <td>{{ entretien.description }}</td>
-            <td>{{ entretien.cost }} €</td>
-            <td>{{ entretien.moto?.brand }} {{ entretien.moto?.model }}</td>
+            <td>{{ entretien.cost }}</td>
+            <td>{{ entretien.moto.brand }} {{ entretien.moto.model }}</td>
             <td>
-              <button @click="modifierEntretien(entretien.id)" class="edit-btn">Modifier</button>
+              <button @click="modifierEntretien(entretien)" class="edit-btn">Modifier</button>
               <button @click="supprimerEntretien(entretien.id)" class="delete-btn">Supprimer</button>
             </td>
           </tr>
@@ -30,8 +30,8 @@
   </template>
   
   <script lang="ts">
-  import { defineComponent, onMounted, ref } from "vue";
-  import api from "../services/api.js";
+  import { defineComponent, ref, onMounted } from "vue";
+  import api from "../services/api";
   
   interface Entretien {
     id: string;
@@ -39,13 +39,14 @@
     description: string;
     cost: number;
     moto: {
+      id: string;
       brand: string;
       model: string;
     };
   }
   
   export default defineComponent({
-    name: "Entretiens",
+    name: "EntretienList",
     setup() {
       const entretiens = ref<Entretien[]>([]);
   
@@ -54,7 +55,7 @@
           const response = await api.get("/entretiens");
           entretiens.value = response.data;
         } catch (error) {
-          console.error("Erreur lors du chargement :", error);
+          console.error("Erreur lors du chargement des entretiens :", error);
         }
       };
   
@@ -62,14 +63,15 @@
         window.location.href = "/#/add-entretien";
       };
   
-      const modifierEntretien = (id: string) => {
-        window.location.href = `/#/edit-entretien/${id}`;
+      const modifierEntretien = (entretien: Entretien) => {
+        window.location.href = `/#/edit-entretien/${entretien.id}`;
       };
   
       const supprimerEntretien = async (id: string) => {
-        if (confirm("Voulez-vous vraiment supprimer cet entretien ?")) {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cet entretien ?")) {
           try {
             await api.delete(`/entretiens/${id}`);
+            alert("Entretien supprimé !");
             fetchEntretiens();
           } catch (error) {
             console.error("Erreur lors de la suppression :", error);
@@ -77,9 +79,17 @@
         }
       };
   
-      onMounted(() => fetchEntretiens());
+      onMounted(() => {
+        fetchEntretiens();
+      });
   
-      return { entretiens, allerVersAjouterEntretien, modifierEntretien, supprimerEntretien };
+      return {
+        entretiens,
+        fetchEntretiens,
+        allerVersAjouterEntretien,
+        modifierEntretien,
+        supprimerEntretien,
+      };
     },
   });
   </script>

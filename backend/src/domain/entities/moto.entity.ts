@@ -13,4 +13,5 @@ export class Moto {
 
   @Column({ type: 'int', nullable: false }) // ✅ Ajout de `nullable: false`
   year: number;
+    entretiens: any;
 }

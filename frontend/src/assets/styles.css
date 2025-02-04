@@ -1,40 +1,32 @@
-/* Style général pour l'application */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Style des formulaires */
-  .form-container {
-    max-width: 500px;
-    margin: 20px auto;
+.container {
+    max-width: 800px;
+    margin: auto;
     padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  input, select {
+  .table {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border-collapse: collapse;
+    margin: 20px 0;
   }
   
-  button {
+  .table th, .table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .add-btn, .rappel-btn {
     background-color: #007bff;
     color: white;
+    padding: 10px 15px;
     border: none;
-    padding: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
+    margin-right: 10px;
   }
   
-  button:hover {
+  .add-btn:hover, .rappel-btn:hover {
     background-color: #0056b3;
   }
   

@@ -10,8 +10,10 @@ export class AddEntretienUseCase {
   ) {}
 
   async execute(entretien: Entretien): Promise<void> {
+    console.log("Ajout d'entretien :", entretien); // Vérifie les données
     await this.entretienRepository.save(entretien);
   }
+  
 
   async getAllEntretiens(): Promise<Entretien[]> {
     return this.entretienRepository.findAll();
@@ -33,4 +35,6 @@ export class AddEntretienUseCase {
   async findById(id: string): Promise<Entretien | null> {
     return this.entretienRepository.findById(id);
   }
+
+  
 }

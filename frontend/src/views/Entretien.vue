@@ -59,11 +59,11 @@
       };
   
       const allerVersAjouterEntretien = () => {
-        window.location.href = "/#/add-entretien";
+        window.location.href = "/addentretien";
       };
   
       const modifierEntretien = (id: string) => {
-        window.location.href = `/#/edit-entretien/${id}`;
+        window.location.href = `/editentretien/${id}`;
       };
   
       const supprimerEntretien = async (id: string) => {
