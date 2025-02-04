@@ -4,8 +4,8 @@ import Motos from "../components/Motos.vue";
 import Entretiens from "../views/Entretiens.vue";
 import Pieces from "../views/Pieces.vue";
 import Conducteurs from "../views/Conducteurs.vue";
-import AddMoto from "../components/Addmoto.vue";
-import EditMoto from "../components/EditMoto.vue"; // Nouvelle page pour modifier une moto
+import AddEntretien from "../components/AddEntretien.vue";
+import EditEntretien from "../components/EditEntretien.vue";
 
 const routes = [
   { path: "/", name: "Dashboard", component: Dashboard },
@@ -13,8 +13,8 @@ const routes = [
   { path: "/entretiens", name: "Entretiens", component: Entretiens },
   { path: "/pieces", name: "Pieces", component: Pieces },
   { path: "/conducteurs", name: "Conducteurs", component: Conducteurs },
-  { path: "/addmoto", name: "AddMoto", component: AddMoto },
-  { path: "/editmoto/:id", name: "EditMoto", component: EditMoto, props: true }, // Route dynamique
+  { path: "/add-entretien", name: "AddEntretien", component: AddEntretien },
+  { path: "/edit-entretien/:id", name: "EditEntretien", component: EditEntretien, props: true },
 ];
 
 const router = createRouter({
