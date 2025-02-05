@@ -5,15 +5,15 @@ export class Piece {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
+  @Column()
   name: string;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ default: 0 })
   quantity: number;
 
-  @Column({ type: 'int', nullable: false })
-  lowStockThreshold: number;
+  @Column()
+  price: number; // Assurez-vous qu'il n'y a pas de `nullable: true` ici
 
-  @Column({ type: 'decimal', nullable: false })
-  cost: number;
+  @Column({ default: 1 }) // Par défaut, définissez une valeur minimale pour éviter NULL
+  lowStockThreshold: number;
 }

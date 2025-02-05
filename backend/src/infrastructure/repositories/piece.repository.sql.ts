@@ -21,6 +21,7 @@ export class SqlPieceRepository extends AbstractPieceRepository {
   }
 
   async save(piece: Piece): Promise<void> {
+    console.log('Données sauvegardées dans le repository :', piece);
     await this.repository.save(piece);
   }
 
@@ -34,6 +35,14 @@ export class SqlPieceRepository extends AbstractPieceRepository {
 
   async getLowStockPieces(): Promise<Piece[]> {
     const allPieces = await this.repository.find();
-    return allPieces.filter(piece => piece.quantity < piece.lowStockThreshold);
-  }
+    const lowStockPieces = allPieces.filter(piece => piece.quantity < piece.lowStockThreshold);
+
+    // Ajoute une alerte pour les pièces dont le stock est bas
+    lowStockPieces.forEach(piece => {
+        console.warn(`Alerte : La pièce "${piece.name}" est en stock critique (${piece.quantity} restant, seuil : ${piece.lowStockThreshold})`);
+        // Ici, vous pouvez enregistrer une alerte dans une base de données ou envoyer une notification
+    });
+
+    return lowStockPieces;
+}
 }
