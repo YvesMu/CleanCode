@@ -11,18 +11,61 @@
       <h2 class="text-2xl font-bold mb-4">📊 Statistiques générales</h2>
       <ul class="space-y-3">
         <li class="stat-item">
-          <span class="icon">🏍️</span> <strong>Total des motos :</strong> <span>45</span>
+          <span class="icon">🏍️</span> <strong>Total des motos :</strong> <span>{{ stats.motos }}</span>
         </li>
         <li class="stat-item">
-          <span class="icon">🛠️</span> <strong>Entretiens planifiés :</strong> <span>12</span>
+          <span class="icon">🛠️</span> <strong>Entretiens planifiés :</strong> <span>{{ stats.entretiens }}</span>
         </li>
         <li class="stat-item">
-          <span class="icon">📦</span> <strong>Pièces disponibles :</strong> <span>200</span>
+          <span class="icon">📦</span> <strong>Pièces disponibles :</strong> <span>{{ stats.pieces }}</span>
         </li>
       </ul>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent, onMounted, ref } from "vue";
+import api from "../services/api";
+
+export default defineComponent({
+  name: "Dashboard",
+  setup() {
+    const stats = ref({
+      motos: 0,
+      entretiens: 0,
+      pieces: 0,
+    });
+
+    const fetchStats = async () => {
+      try {
+        const motosResponse = await api.get("/motos"); // API pour récupérer les motos
+        const entretiensResponse = await api.get("/entretiens"); // API pour les entretiens
+        const piecesResponse = await api.get("/pieces"); // API pour les pièces
+
+        stats.value = {
+          motos: motosResponse.data.length,
+          entretiens: entretiensResponse.data.length,
+          pieces: piecesResponse.data.reduce(
+            (total: number, piece: { quantity: number }) => total + piece.quantity,
+            0
+          ),
+        };
+      } catch (error) {
+        console.error("Erreur lors du chargement des statistiques :", error);
+      }
+    };
+
+    onMounted(() => {
+      fetchStats();
+    });
+
+    return {
+      stats,
+    };
+  },
+});
+</script>
 
 <style scoped>
 .dashboard {

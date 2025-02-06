@@ -1,93 +1,87 @@
 <template>
-  <v-container>
-    <v-card>
-      <v-card-text>
-        <div class="container">
-          <h1 class="title">Liste des Conducteurs</h1>
-          <button class="add-btn" @click="allerVersAjouterConducteur">Ajouter un Conducteur</button>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="conducteur in conducteurs" :key="conducteur.id">
-                <td>{{ conducteur.nom }}</td>
-                <td>{{ conducteur.prenom }}</td>
-                <td>{{ conducteur.email }}</td>
-                <td>
-                  <button @click="modifierConducteur(conducteur.id)" class="edit-btn">
-                    Modifier
-                  </button>
-                  <button @click="supprimerConducteur(conducteur.id)" class="delete-btn">
-                    Supprimer
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </v-card-text>
-    </v-card>
-  </v-container>
+  <div class="conducteurs-container">
+    <h1>Liste des Conducteurs</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="conducteur in conducteurs" :key="conducteur.id">
+          <td>{{ conducteur.name }}</td>
+          <td>{{ conducteur.email }}</td>
+          <td>
+            <button @click="viewDetails(conducteur.id)">Voir Détails</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
-import api from '../services/api.js'
+import { defineComponent, onMounted, ref } from "vue";
+import api from "../services/api";
 
 interface Conducteur {
-  id: string
-  nom: string
-  prenom: string
-  email: string
+  id: string;
+  name: string;
+  email: string;
 }
 
 export default defineComponent({
-  name: 'Conducteurs',
+  name: "Conducteurs",
   setup() {
-    const conducteurs = ref<Conducteur[]>([])
+    const conducteurs = ref<Conducteur[]>([]);
 
     const fetchConducteurs = async () => {
       try {
-        const response = await api.get('/conducteurs')
-        conducteurs.value = response.data
+        const response = await api.get("/users");
+        conducteurs.value = response.data;
       } catch (error) {
-        console.error('Erreur lors du chargement :', error)
+        console.error("Erreur lors du chargement des conducteurs :", error);
       }
-    }
+    };
 
-    const allerVersAjouterConducteur = () => {
-      window.location.href = '/addconducteur'
-    }
+    const viewDetails = (id: string) => {
+      window.location.href = `/conducteurs/${id}`;
+    };
 
-    const modifierConducteur = (id: string) => {
-      window.location.href = `/editconducteur/${id}`
-    }
+    onMounted(fetchConducteurs);
 
-    const supprimerConducteur = async (id: string) => {
-      if (confirm('Voulez-vous vraiment supprimer ce conducteur ?')) {
-        try {
-          await api.delete(`/conducteurs/${id}`)
-          fetchConducteurs()
-        } catch (error) {
-          console.error('Erreur lors de la suppression :', error)
-        }
-      }
-    }
-
-    onMounted(() => fetchConducteurs())
-
-    return { conducteurs, allerVersAjouterConducteur, modifierConducteur, supprimerConducteur }
+    return { conducteurs, viewDetails };
   },
-})
+});
 </script>
 
 <style scoped>
-@import '../assets/styles.css';
+.conducteurs-container {
+  padding: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead {
+  background-color: #f4f4f4;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
 </style>
